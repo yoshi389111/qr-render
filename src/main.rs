@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{Parser, value_parser};
 use qr_render::QrCodeBitmap;
 
 #[derive(Debug, Parser)]
@@ -8,8 +8,8 @@ struct Args {
     data: String,
 
     /// The size of the quiet zone around the QR code
-    #[arg(short, long, default_value_t = 2)]
-    quiet_zone: usize,
+    #[arg(short, long, default_value_t = 2, value_parser = value_parser!(u8).range(0..=4))]
+    quiet_zone: u8,
 
     /// The style of the QR code
     #[arg(short, long, default_value = "half", value_parser = ["braille", "half", "octant", "quadrant", "separated-quadrant", "separated-sextant", "sextant"])]
@@ -19,7 +19,12 @@ struct Args {
 fn main() {
     let args = Args::parse();
 
-    let qr_bitmap = QrCodeBitmap::new(args.data.as_bytes(), args.quiet_zone);
+    let data = args.data.as_bytes();
+    let quiet_zone = args.quiet_zone as usize;
+    let qr_bitmap = QrCodeBitmap::new(data, quiet_zone).unwrap_or_else(|e| {
+        eprintln!("Failed to create QR code: {}", e);
+        std::process::exit(1);
+    });
 
     let output = match args.style.as_str() {
         "braille" => qr_render::Braille::render(&qr_bitmap),

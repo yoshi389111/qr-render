@@ -7,9 +7,11 @@ pub struct QrCodeBitmap {
 }
 
 impl QrCodeBitmap {
-    pub fn new(data: &[u8], quiet_zone: usize) -> Self {
-        let code = QrCode::new(data).unwrap();
-        Self { code, quiet_zone }
+    pub fn new(data: &[u8], quiet_zone: usize) -> Result<Self, qrcode::types::QrError> {
+        assert!(quiet_zone <= 4, "Quiet zone must be between 0 and 4");
+
+        let code = QrCode::new(data)?;
+        Ok(Self { code, quiet_zone })
     }
 }
 
