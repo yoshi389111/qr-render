@@ -53,6 +53,6 @@ impl BinaryImage for Bitmap {
     }
 
     fn get(&self, x: usize, y: usize) -> bool {
-        self.get(x, y)
+        Bitmap::get(self, x, y)
     }
 }
