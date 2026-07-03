@@ -26,7 +26,7 @@ qr-render [OPTIONS] <DATA>
   - `separated-sextant`
   - `sextant`
   - `svg`
-- `-o`, `--output <FILE>`: Specify the output file for the QR code. If not provided, the QR code will be printed to the stdout.
+- `-o`, `--output <FILE>`: Specify the output file for the QR code. If not provided, the QR code will be printed to stdout.
 - `-h`, `--help`: Show help message and exit.
 - `-v`, `--version`: Show version information and exit.
 
