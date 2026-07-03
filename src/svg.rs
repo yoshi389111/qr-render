@@ -110,6 +110,8 @@ impl SvgEncoder {
         // verify that the value is 255 or less.
         debug_assert!(from.x <= 255);
         debug_assert!(from.y <= 255);
+        debug_assert!(to.x <= 255);
+        debug_assert!(to.y <= 255);
 
         let dx = to.x as isize - from.x as isize;
         let dy = to.y as isize - from.y as isize;
