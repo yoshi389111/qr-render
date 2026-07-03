@@ -144,7 +144,7 @@ impl SvgEncoder {
                 if (1 < x && !image.get(x - 1, y)) || x == 0 {
                     edges.insert(Edge::new(x, y, x, y + 1));
                 }
-                if !image.get(x, y + 1) {
+                if y + 1 >= height || !image.get(x, y + 1) {
                     edges.insert(Edge::new(x, y + 1, x + 1, y + 1));
                 }
                 if !image.get(x + 1, y) {
