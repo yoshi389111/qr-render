@@ -1,6 +1,7 @@
 mod encode;
 mod image;
 mod qrcode;
+mod svg;
 
 pub use encode::Braille;
 pub use encode::Half;
@@ -12,3 +13,4 @@ pub use encode::Sextant;
 pub use image::BinaryImage;
 pub use image::Bitmap;
 pub use qrcode::QrCodeBitmap;
+pub use svg::SvgEncoder;

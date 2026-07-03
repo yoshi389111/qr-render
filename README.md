@@ -25,6 +25,8 @@ qr-render [OPTIONS] <DATA>
   - `separated-quadrant`
   - `separated-sextant`
   - `sextant`
+  - `svg`
+- `-o`, `--output <FILE>`: Specify the output file for the QR code. If not provided, the QR code will be printed to the stdout.
 - `-h`, `--help`: Show help message and exit.
 - `-v`, `--version`: Show version information and exit.
 
@@ -57,9 +59,8 @@ In that instance, please use a different style.
 
 ## TODO
 
-- Add svg style support.
 - Add sixel style support.
-- Allow specifying file output.
+- Add support for QR code Level M, Q, and H.
 
 ## COPYRIGHT
 
