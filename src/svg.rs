@@ -150,7 +150,7 @@ impl SvgEncoder {
                 if x + 1 >= width || !image.get(x + 1, y) {
                     edges.insert(Edge::new(x + 1, y + 1, x + 1, y));
                 }
-                if (1 < y && !image.get(x, y - 1)) || y == 0 {
+                if (y > 0 && !image.get(x, y - 1)) || y == 0 {
                     edges.insert(Edge::new(x + 1, y, x, y));
                 }
             }
