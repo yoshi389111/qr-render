@@ -64,7 +64,7 @@ impl SvgEncoder {
     ) -> std::fmt::Result {
         write!(out, "<path d=\"")?;
 
-        let paths = Self::extract_path(image);
+        let paths = Self::extract_paths(image);
         let mut current = Coord { x: 0, y: 0 };
 
         for path in &paths {
@@ -119,12 +119,11 @@ impl SvgEncoder {
     }
 
     /// Extracts all closed paths from a binary image.
-    fn extract_path(image: &impl BinaryImage) -> Vec<Vec<Coord>> {
+    fn extract_paths(image: &impl BinaryImage) -> Vec<Vec<Coord>> {
         let mut edges = Self::create_edges(image);
         let mut all_paths = Vec::new();
 
-        while !edges.is_empty() {
-            let path = Self::extract_closed_subpath(&mut edges);
+        while let Some(path) = Self::extract_closed_subpath(&mut edges) {
             all_paths.push(path);
         }
 
@@ -159,10 +158,8 @@ impl SvgEncoder {
     }
 
     /// Extracts a closed subpath from the set of edges, starting from an arbitrary edge.
-    fn extract_closed_subpath(edges: &mut BTreeSet<Edge>) -> Vec<Coord> {
-        debug_assert!(!edges.is_empty(), "edges should not be empty");
-
-        let start_edge = edges.first().expect("edges should not be empty");
+    fn extract_closed_subpath(edges: &mut BTreeSet<Edge>) -> Option<Vec<Coord>> {
+        let start_edge = edges.first()?;
         let mut path = Self::extract_subpath_fragment(edges, start_edge.start);
 
         while let Some(index) = Self::find_index_of_cross_point(&path, edges) {
@@ -171,11 +168,34 @@ impl SvgEncoder {
             path.splice(index..index, fragment);
         }
 
-        if path.len() < 3 {
-            return path;
+        debug_assert!(
+            3 <= path.len(),
+            "A contour path cannot consist of fewer than three elements."
+        );
+
+        Some(Self::simplify_path(&path))
+    }
+
+    /// Extracts a subpath fragment from the set of edges, starting from a given coordinate.
+    fn extract_subpath_fragment(edges: &mut BTreeSet<Edge>, start: Coord) -> Vec<Coord> {
+        let mut fragment = Vec::new();
+        let mut current = start;
+        while let Some(edge) = Self::find_edge_starting_from(edges, current) {
+            edges.remove(&edge);
+            fragment.push(edge.start);
+            current = edge.end;
         }
 
-        // simplify the path by removing points that are not corners
+        debug_assert!(
+            start == current,
+            "The extracted subpath fragment should form a closed path."
+        );
+
+        fragment
+    }
+
+    /// Simplify the path by removing points that are not corners.
+    fn simplify_path(path: &[Coord]) -> Vec<Coord> {
         (0..path.len())
             .filter(|&i| {
                 if i == 0 {
@@ -190,28 +210,15 @@ impl SvgEncoder {
             .collect()
     }
 
-    /// Extracts a subpath fragment from the set of edges, starting from a given coordinate.
-    fn extract_subpath_fragment(edges: &mut BTreeSet<Edge>, start: Coord) -> Vec<Coord> {
-        let mut fragment = Vec::new();
-        let mut current = start;
-        while let Some(edge) = Self::find_edge_starting_from(edges, current) {
-            edges.remove(&edge);
-            fragment.push(edge.start);
-            current = edge.end;
-        }
-        fragment
-    }
-
     /// Finds an edge in the set of edges that starts from a given coordinate.
     fn find_edge_starting_from(edges: &BTreeSet<Edge>, start: Coord) -> Option<Edge> {
         let start_key = Edge::new(start.x, start.y, 0, 0);
-        edges.range(start_key..).next().and_then(|edge| {
-            if edge.start == start {
-                Some(*edge)
-            } else {
-                None
-            }
-        })
+        let edge = edges.range(start_key..).next()?;
+        if edge.start == start {
+            Some(*edge)
+        } else {
+            None
+        }
     }
 
     /// Finds the index of a coordinate in a path that has an outgoing edge in the set of edges.
