@@ -2,6 +2,11 @@
 name = "qr-render"
 version = "0.1.0"
 edition = "2024"
+description = "A simple QR code renderer that outputs to the terminal or files."
+repository = "https://github.com/yoshi389111/qr-render"
+license = "MIT"
+keywords = ["qr-code"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 clap = { version = "4.6.1", features = ["derive"] }

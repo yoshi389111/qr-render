@@ -7,7 +7,7 @@ struct Args {
     /// The data to encode in the QR code
     data: String,
 
-    /// The size of the quiet zone around the QR code
+    /// The size of the quiet zone around the QR code [range: 0-4]
     #[arg(short, long, default_value_t = 2, value_parser = value_parser!(u8).range(0..=4))]
     quiet_zone: u8,
 

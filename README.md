@@ -12,7 +12,7 @@ qr-render [OPTIONS] <DATA>
 
 ## DESCRIPTION
 
-`qr-render` is a command-line tool for rendering QR codes in various styles, including braille, half, octant, quadrant, separated quadrant, separated sextant, and sextant.
+`qr-render` is a command-line tool for rendering QR codes in various styles.
 
 ## OPTIONS
 
@@ -51,8 +51,8 @@ $ qr-render "Hello, World!"
 
 ## NOTES
 
-Depending on the Unicode version supported by the operating system, characters used in certain styles may not display correctly.
-Please use styles supported by your font or terminal software.
+Some styles use Unicode characters that may not be supported by your operating system, terminal emulator, or fonts.
+If characters are displayed incorrectly, try a different style.
 
 If Braille is specified for the style, the QR code may not be read correctly in some cases.
 In that instance, please use a different style.
@@ -61,6 +61,7 @@ In that instance, please use a different style.
 
 - Add sixel style support.
 - Add support for QR code Level M, Q, and H.
+- Add ascii style support.
 
 ## COPYRIGHT
 
