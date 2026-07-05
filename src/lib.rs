@@ -3,14 +3,7 @@ mod image;
 mod qrcode;
 mod svg;
 
-pub use encode::Braille;
-pub use encode::Half;
-pub use encode::Octant;
-pub use encode::Quadrant;
-pub use encode::SeparatedQuadrant;
-pub use encode::SeparatedSextant;
-pub use encode::Sextant;
-pub use image::BinaryImage;
-pub use image::Bitmap;
-pub use qrcode::QrCodeBitmap;
+pub use encode::{Braille, Half, Octant, Quadrant, SeparatedQuadrant, SeparatedSextant, Sextant};
+pub use image::{BinaryImage, Bitmap};
+pub use qrcode::{ErrorLevel, QrCodeBitmap};
 pub use svg::SvgEncoder;

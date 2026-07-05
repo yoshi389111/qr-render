@@ -6,11 +6,30 @@ pub struct QrCodeBitmap {
     pub quiet_zone: usize,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ErrorLevel {
+    Low,
+    Medium,
+    Quartile,
+    High,
+}
+
 impl QrCodeBitmap {
-    pub fn new(data: &[u8], quiet_zone: usize) -> Result<Self, qrcode::types::QrError> {
+    pub fn new(
+        data: &[u8],
+        error_level: ErrorLevel,
+        quiet_zone: usize,
+    ) -> Result<Self, qrcode::types::QrError> {
         assert!(quiet_zone <= 4, "Quiet zone must be between 0 and 4");
 
-        let code = QrCode::new(data)?;
+        let ec_level = match error_level {
+            ErrorLevel::Low => qrcode::EcLevel::L,
+            ErrorLevel::Medium => qrcode::EcLevel::M,
+            ErrorLevel::Quartile => qrcode::EcLevel::Q,
+            ErrorLevel::High => qrcode::EcLevel::H,
+        };
+
+        let code = QrCode::with_error_correction_level(data, ec_level)?;
         Ok(Self { code, quiet_zone })
     }
 }

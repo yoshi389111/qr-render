@@ -17,6 +17,11 @@ qr-render [OPTIONS] <DATA>
 ## OPTIONS
 
 - `-q`, `--quiet-zone <SIZE>`: Specify the size of the quiet zone around the QR code. The default size is 2.
+- `-e`, `--error-level <LEVEL>`: Specify the error correction level. The default level is `M`. Available levels are:
+  - `L`: Low (7%)
+  - `M`: Medium (15%)
+  - `Q`: Quartile (25%)
+  - `H`: High (30%)
 - `-s`, `--style <STYLE>`: Specify the rendering style. Available styles are:
   - `braille`
   - `half`
@@ -60,8 +65,8 @@ In that instance, please use a different style.
 ## TODO
 
 - Add sixel style support.
-- Add support for QR code Level M, Q, and H.
 - Add ascii style support.
+- Add ansi escape sequence style support.
 
 ## COPYRIGHT
 
